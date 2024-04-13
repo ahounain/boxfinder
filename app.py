@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import boxfinder
 
 
@@ -19,20 +19,20 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/save-boxes', methods =['POST'])
+@app.route('/save-boxes', methods=['POST'])
 def save_boxes():
-    print("POST request received for /save-custom-boxes")
-    custom_boxes = request.form.get('custom-boxes-form')
+    print("POST request received for /save-boxes")
+    # Correctly access JSON data
+    data = request.get_json()
+    custom_boxes = data.get('customBoxes') if data else None
     print(custom_boxes)
-    with open('custom_boxes.txt', 'a') as file: 
-        file.write("This is a test.")
     try:
         with open('custom_boxes.txt', 'w') as file:
             file.write(custom_boxes)
-        return 'Boxes saved!!'
+        return jsonify({'message': 'Boxes saved!!'}), 200
     except Exception as e:
-            print("Error saving custom boxes: {e}")
-            return 'Error saving boxes', 500
+        print(f"Error saving custom boxes: {e}")
+        return jsonify({'error': 'Error saving boxes'}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
