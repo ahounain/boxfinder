@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Box Finder</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class = "logo-container">
+        <img src = "static/images/logo-no-background.png" alt = "boxfinder logo">
+    </div>
+    <h1>Enter Item Dimensions</h1>
+    <form method="POST">
+        <label for="item_length">Length</label>
+        <input type="number" id="item_length" name="item_length" required><br>
+        <label for="item_width">Width</label>
+        <input type="number" id="item_width" name="item_width" required><br>
+        <label for="item_height">Height</label>
+        <input type="number" id="item_height" name="item_height" required><br>
+        <label for="bubble_wrap">Bubble Wrap?</label>
+        <input type="checkbox" id="bubble_wrap" name="bubble_wrap">
+        <label for="peanuts">Peanuts?</label>
+        <input type="checkbox" id="peanuts" name="peanuts">
+        <input type="submit" value="Find Box!">
+    </form>
+   
+
+
+
+<form id="custom-boxes-form" action = "/save-boxes" method = "post">
+    <textarea id="custom-boxes-input" rows="10" cols="30">
+        6x6x6
+        8x8x8
+        10x10x10
+        12x12x12
+        14x14x14
+        16x16x16
+        18x18x18
+        20x20x20
+        22x22x22
+        30,30,30
+        32x32x32
+        
+    </textarea>
+    <button type="submit">Save Custom Boxes</button>
+</form>
+
+
+
+<script>
+
+document.getElementById('custom-boxes-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Get the custom boxes data from the textarea
+    var customBoxes = document.getElementById('custom-boxes-input').value;
+
+    // Save the custom boxes data to Local Storage
+    localStorage.setItem('customBoxes', customBoxes);
+
+    // Optionally, display a message to the user
+    alert('Custom boxes saved successfully!');
+
+    // Now make the fetch call with the defined customBoxes
+    fetch('/save-boxes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({customBoxes: customBoxes}),
+    })
+    .then(response => {
+        // Check if the response is JSON
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            // If it's JSON, parse it
+            return response.json();
+        } else {
+            // If it's not JSON, handle it as plain text
+            return response.text().then(text => {
+                throw new Error(text);
+            });
+        }
+    })
+    .then(data => {
+        console.log('Success:', data);
+        alert('Custom boxes processed successfully!');
+    })
+    .catch((error) => {
+        console.error('Error:', error.message);
+    });
+});
+
+
+
+
+
+
+
+
+// Load custom boxes from Local Storage when the page loads
+window.onload = function() {
+    var customBoxes = localStorage.getItem('customBoxes');
+    if (customBoxes) {
+        
+        document.getElementById('custom-boxes-input').value = customBoxes;
+    }
+};
+</script>
+</body>
+</html>

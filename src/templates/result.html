@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Box Finder Result</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class = "result-page">
+    <h1 class = "result-title">Closest Box</h1>
+    {% if closest_box %}
+        <p class = "result-description">The closest box to fit the item is: {{ closest_box[0] }}x{{ closest_box[1] }}x{{ closest_box[2] }}</p>
+    {% else %}
+        <p>No boxes found in the file.</p>
+    {% endif %}
+    <a href="/">Find another box!</a>
+    </div>
+</body>
+</html>
