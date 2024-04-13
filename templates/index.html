@@ -47,6 +47,7 @@
 
 
 <script>
+
 document.getElementById('custom-boxes-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the form from submitting normally
 
@@ -58,8 +59,9 @@ document.getElementById('custom-boxes-form').addEventListener('submit', function
 
     // Optionally, display a message to the user
     alert('Custom boxes saved successfully!');
-});
-fetch('/save-boxes', {
+
+    // Now make the fetch call with the defined customBoxes
+    fetch('/save-boxes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -74,6 +76,14 @@ fetch('/save-boxes', {
     .catch((error) => {
         console.error('Error:', error);
     });
+});
+
+
+
+
+
+
+
 
 // Load custom boxes from Local Storage when the page loads
 window.onload = function() {
