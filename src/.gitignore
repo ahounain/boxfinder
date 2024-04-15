@@ -1,2 +1,6 @@
 # created by virtualenv automatically
 
+google-cloud-sdk/
+__pycache__/
+.firebase/
+.firebaserc 
