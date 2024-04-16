@@ -4,3 +4,4 @@ google-cloud-sdk/
 __pycache__/
 .firebase/
 .firebaserc 
+.DS_Store

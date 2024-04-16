@@ -20,7 +20,7 @@ def read_custom_boxes(default_filename='boxess.txt'):
         return boxes
 
 def find_closest_box(boxes, item_dimensions, bubble_wrap = False, peanuts= False):
-    """Finds the closest box to fit the given item dimensions."""
+    
     item_length, item_width, item_height = item_dimensions
 
     # optional peanuts or bubble wrap dimension modification
@@ -32,15 +32,19 @@ def find_closest_box(boxes, item_dimensions, bubble_wrap = False, peanuts= False
         item_length+=PEANUTS_EXTRA_INCHES
         item_width+= PEANUTS_EXTRA_INCHES
         item_height+= PEANUTS_EXTRA_INCHES
-    closest_box = None
-    closest_diff = float('inf')
+    
 
-    for box in boxes:
-        box_length, box_width, box_height = box
-        diff = abs(box_length - item_length) + abs(box_width - item_width) + abs(box_height - item_height)
-        if diff < closest_diff:
-            closest_diff = diff
-            closest_box = box
+# Adjusted dimensions after adding bubble wrap and peanuts
+    adjusted_dimensions = (item_length, item_width, item_height)
+
+    # Filter out boxes that are smaller in any dimension compared to the adjusted dimensions
+    suitable_boxes = [box for box in boxes if all(item_dim <= box_dim for item_dim, box_dim in zip(adjusted_dimensions, box))]
+
+    if not suitable_boxes:
+        return None # No suitable boxes found
+
+    # Find the box with the smallest volume difference that is still large enough to contain the item
+    closest_box = min(suitable_boxes, key=lambda box: abs(box[0] * box[1] * box[2] - item_length * item_width * item_height))
 
     return closest_box
 
